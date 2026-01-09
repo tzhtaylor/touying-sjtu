@@ -36,7 +36,7 @@ Typst 是一门新的基于标记的排版系统，它强大且易于学习。�
 
 Touying 是为 Typst 开发的幻灯片/演示文稿包。Touying 也类似于 LaTeX 的 Beamer，但是得益于 Typst，你可以拥有更快的渲染速度与更简洁的语法。你可以在 Touying 的#link("https://touying-typ.github.io/touying/zh/docs/intro")[文档]中详细了解 Touying。
 
-Touying 取自中文里的「投影」，在英文中意为 project。相较而言，LaTeX 中的 beamer 就是德文的投影仪的意思。#footnote[#text(size: 0.8em)[#cite(<liu_survey_2024>, form: "full", style: "elsevier-harvard")]]
+Touying 取自中文里的「投影」，在英文中意为 project。相较而言，LaTeX 中的 beamer 就是德文的投影仪的意思。@liu_survey_2024
 
 = Touying 幻灯片动画
 
@@ -228,7 +228,7 @@ Touying 社区正在探索与更多 Typst 包的集成，详细情况可查阅#l
     ```
     来创建基于本模板的演示文稿项目。
 
-  - 本模板仓库位于 #link("https://github.com/tzhTaylor/touying-sjtu")，欢迎关注与贡献。
+  - 本模板仓库位于 #link("https://github.com/tzhtaylor/touying-sjtu")，欢迎关注与贡献。
 ]
 
 == 参考文献 <touying:unoutlined>

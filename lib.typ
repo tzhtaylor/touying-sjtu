@@ -119,7 +119,25 @@
   }
 )
 
+#let _get-last-heading-depth(current-headings) = {
+  if current-headings != () {
+    current-headings.at(-1).depth
+  } else {
+    0
+  }
+}
+
+#let _get-last-heading-label(current-headings) = {
+  if current-headings != () {
+    if current-headings.at(-1).has("label") {
+      str(current-headings.at(-1).label)
+    }
+  }
+}
+
 #let sjtu-header(self) = {
+  let last-heading-depth = _get-last-heading-depth(self.headings)
+  let last-heading-label = _get-last-heading-label(self.headings)
   if self.store.navigation == "sidebar" {
     place(right + top, {
       v(4em)
@@ -153,14 +171,20 @@
     )
     grid(
       inset: (x: 1.9em),
-      rows: (auto, auto, auto),
-      row-gutter: 15%,
+      rows: (1fr, 2fr),
+      row-gutter: 5%,
       grid(
         columns: (75%, 25%),
-        align(left + horizon, utils.display-current-heading(depth: self.slide-level, style: auto)),
+        [
+          #set text(size: 16pt)
+          #align(left + horizon, utils.display-current-heading(
+            depth: if last-heading-label == "touying:hidden" { self.slide-level - 1 } else { self.slide-level },
+            style: none,
+          ))
+        ],
         align(right + horizon, image("vi/sjtu-vi-sjtugate.png", height: 0.9cm)),
       ),
-      align(center + horizon, line(length: 100%, stroke: (paint: self.colors.primary, thickness: 1.5pt))),
+      align(center + top, line(length: 100%, stroke: (paint: self.colors.primary, thickness: 1.5pt))),
     )
   } else {
     grid(
@@ -169,10 +193,16 @@
       row-gutter: 15%,
       grid(
         columns: (75%, 25%),
-        align(left + horizon, utils.display-current-heading(depth: self.slide-level, style: auto)),
-        align(right + horizon, image("vi/sjtu-vi-sjtugate.png")),
+        [
+          #set text(size: 16pt)
+          #align(left + horizon, utils.display-current-heading(
+            depth: if last-heading-label == "touying:hidden" { self.slide-level - 1 } else { self.slide-level },
+            style: none,
+          ))
+        ],
       ),
       align(center + horizon, line(length: 100%, stroke: (paint: self.colors.primary, thickness: 1.5pt))),
+      v(1em),
     )
   }
 }
@@ -267,12 +297,13 @@
     set page(background: align(left + bottom, image("vi/sjtu-vi-sjtubg.png", width: if self.show-notes-on-second-screen
       == right { 50% } else { 100% })))
     block(width: 100%, inset: 3em, {
+      v(0.2fr)
       block(
         if info.subtitle == none {
           linebreak()
         }
           + text(
-            size: if info.subtitle == none { 2em } else { 1.7em },
+            size: if info.subtitle == none { 2.2em } else { 1.9em },
             fill: self.colors.primary,
             weight: "bold",
             info.title,
@@ -305,7 +336,7 @@
       if extra != none {
         block(spacing: 1em, extra)
       }
-      v(0.2fr)
+      v(0.3fr)
     })
   }
   touying-slide(self: self, body)
@@ -332,7 +363,7 @@
       block(
         inset: (y: 1.6em, x: 3em),
         text(
-          size: 1.6em,
+          size: 1.8em,
           fill: self.colors.neutral-light,
           weight: "bold",
           info.title,
@@ -384,7 +415,7 @@
     top: 3em,
   )))
   touying-slide(self: self, config: config, components.adaptive-columns(
-    start: text(1.7em, fill: self.colors.primary, weight: "bold", utils.call-or-display(self, title)),
+    start: text(1.7em, fill: self.colors.primary, weight: "bold", utils.call-or-display(self, title) + v(0.5em)),
     text(fill: self.colors.neutral-darkest, outline(title: none, indent: 1em, depth: self.slide-level, ..args)),
   ))
 })
@@ -621,8 +652,9 @@
   set text(fill: self.colors.primary, size: 1.75em, weight: "bold")
   let body = {
     set page(background: align(left, image("vi/sjtu-vi-end.png")))
-    v(3.6em)
+    v(1fr)
     body
+    v(1.25fr)
   }
   touying-slide(self: self, config: config, align(top + center, body))
 })
@@ -712,15 +744,18 @@
     (height: 4em, x: 2em, display-section: false, display-subsection: true, linebreaks: true, short-heading: true),
     mini-slides,
   )
-  set text(size: 18pt)
-  set par(justify: true)
+  set text(size: 16pt)
+  set par(justify: true, leading: 1.25em)
+
+  set cite(style: "chicago-notes")
+  show footnote.entry: set text(.8em)
 
   show: touying-slides.with(
     config-page(paper: "presentation-" + aspect-ratio, header-ascent: 1.5em, footer-descent: 0em, margin: if navigation
       == "sidebar" {
       (top: 2em, bottom: 1em, x: sidebar.width)
     } else if navigation == "mini-slides" {
-      (top: if mini-slides.linebreaks { mini-slides.height } else { 5.5em }, bottom: 3em, x: mini-slides.x)
+      (top: if mini-slides.linebreaks { mini-slides.height } else { 6em }, bottom: 3em, x: mini-slides.x)
     } else {
       (top: 5em, bottom: 2em, x: mini-slides.x)
     }),
